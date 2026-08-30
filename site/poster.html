@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Island Stays, the Village Goes — poster</title>
+<style>
+  @page { size: 594mm 841mm; margin: 0; }
+  :root {
+    --ink:#0d0d0c; --ink-2:#3f3e3a; --ink-3:#77766e;
+    --paper:#f7f6f2; --card:#ffffff; --rule:#d9d8d2;
+    --erode:#c62f2f; --grow:#1f66bd; --neutral:#b9b8b2;
+    --seq-0:#cde2fb; --seq-1:#86b6ef; --seq-2:#3987e5; --seq-3:#256abf; --seq-4:#0d366b;
+  }
+  * { box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  body { margin:0; width:594mm; height:841mm; background:var(--paper); color:var(--ink);
+         font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+         display:flex; flex-direction:column; overflow:hidden; }
+  .sans { font-family:ui-sans-serif,system-ui,"Segoe UI",Roboto,sans-serif; }
+  .pad { padding:0 22mm; }
+
+  header { padding:13mm 22mm 5mm; }
+  .kicker { font-family:ui-sans-serif,system-ui,sans-serif; font-size:4.1mm;
+            letter-spacing:.32em; text-transform:uppercase; color:var(--ink-3); margin:0 0 7mm; }
+  h1 { font-size:26mm; line-height:.93; margin:0 0 5mm; letter-spacing:-.022em; font-weight:600; }
+  h1 em { font-style:normal; color:var(--erode); }
+  .deck { font-size:6.0mm; line-height:1.42; color:var(--ink-2); max-width:150mm; margin:0; }
+  .byline { font-family:ui-sans-serif,system-ui,sans-serif; font-size:4.0mm;
+            color:var(--ink-2); margin:-4mm 0 6mm; letter-spacing:.01em; }
+  .rule { height:.7mm; background:var(--ink); margin:6mm 22mm 0; }
+
+  .nums { display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin:6mm 0 0;
+          border-top:.35mm solid var(--rule); border-bottom:.35mm solid var(--rule); }
+  .num { padding:5mm 6mm; border-right:.35mm solid var(--rule); }
+  .num:last-child { border-right:0; }
+  .num b { display:block; font-size:15mm; line-height:1; letter-spacing:-.035em; font-weight:600; }
+  .num .u { font-size:4.6mm; color:var(--ink-3); }
+  .num p { font-family:ui-sans-serif,system-ui,sans-serif; font-size:3.9mm; line-height:1.4;
+           color:var(--ink-2); margin:3.5mm 0 0; }
+  .num.e b { color:var(--erode); } .num.g b { color:var(--grow); }
+
+  h2 { font-family:ui-sans-serif,system-ui,sans-serif; font-size:6.4mm; margin:7mm 0 2mm;
+       letter-spacing:-.01em; font-weight:640; }
+  .say { font-size:4.4mm; color:var(--ink-2); margin:0 0 3.5mm; max-width:172mm; line-height:1.5;
+         font-family:ui-sans-serif,system-ui,sans-serif; }
+
+  .grid9 { display:grid; grid-template-columns:repeat(5,1fr); gap:3mm; }
+  .isl { background:var(--card); border:.3mm solid var(--rule); border-radius:2mm; padding:2.4mm; }
+  .isl h3 { font-family:ui-sans-serif,system-ui,sans-serif; font-size:3.9mm; margin:0; font-weight:620; }
+  .isl .sm { font-family:ui-sans-serif,system-ui,sans-serif; font-size:3.2mm;
+             color:var(--ink-3); margin:.6mm 0 2mm; }
+  .isl .rt { font-family:ui-sans-serif,system-ui,sans-serif; font-size:4.4mm; font-weight:640; }
+  .isl svg { width:100%; height:auto; display:block; }
+
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:9mm; }
+  .panel { background:var(--card); border:.3mm solid var(--rule); border-radius:2mm; padding:5mm; }
+  .cap { font-family:ui-sans-serif,system-ui,sans-serif; font-size:3.6mm;
+         color:var(--ink-2); margin:0 0 3mm; font-weight:600; }
+  .tick { fill:var(--ink-3); font-family:ui-sans-serif,sans-serif; }
+  .lbl { fill:var(--ink); font-family:ui-sans-serif,sans-serif; }
+  .val { fill:var(--ink-2); font-family:ui-sans-serif,sans-serif; }
+  .grid-line { stroke:var(--rule); stroke-width:.28; }
+  .zero-line { stroke:var(--ink); stroke-width:.5; }
+
+  .stories { display:grid; grid-template-columns:repeat(3,1fr); gap:5mm; }
+  .st { background:var(--card); border:.3mm solid var(--rule); border-left:1.2mm solid var(--ink);
+        border-radius:0 2mm 2mm 0; padding:5mm; }
+  .st .tag { font-family:ui-sans-serif,sans-serif; font-size:3.1mm; text-transform:uppercase;
+             letter-spacing:.15em; color:var(--ink-3); }
+  .st h4 { font-size:5.4mm; margin:2mm 0 3mm; line-height:1.2; font-weight:600; }
+  .st p { font-family:ui-sans-serif,system-ui,sans-serif; font-size:3.5mm; line-height:1.5;
+          color:var(--ink-2); margin:0; }
+  .st.lost { border-left-color:var(--erode); }
+  .st.gain { border-left-color:var(--grow); }
+
+  .close { margin:6mm 0 0; padding:6mm 8mm; background:var(--ink); color:var(--paper);
+           border-radius:2mm; }
+  .close p { font-size:5.6mm; line-height:1.4; margin:0; max-width:210mm; }
+  footer { margin-top:auto; padding:5mm 22mm 8mm; font-family:ui-sans-serif,sans-serif;
+           font-size:3.1mm; line-height:1.5; color:var(--ink-3); border-top:.35mm solid var(--rule); }
+  footer b { color:var(--ink-2); }
+  .legend { display:flex; gap:7mm; font-family:ui-sans-serif,sans-serif; font-size:3.4mm;
+            color:var(--ink-2); margin:0 0 4mm; align-items:center; }
+  .key { display:inline-flex; align-items:center; gap:2mm; }
+  .sw { width:3mm; height:3mm; border-radius:.7mm; display:inline-block; }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="kicker">Pacific Dataviz Challenge 2026 · Climate change</p>
+  <p class="byline">Saurab Nand · Mohammed Junaid Hanif · Karan Parmar</p>
+  <h1>The island stays.<br><em>The village goes.</em></h1>
+  <p class="deck">
+    “The Pacific is sinking” is one sentence stretched over thousands of islands that are doing
+    opposite things. Twenty-five years of satellite shoreline measurement, read island by island,
+    says the sentence is wrong in both directions — and that it is measuring the wrong thing.
+  </p>
+</header>
+<div class="rule"></div>
+
+<div class="pad">
+  <div class="nums" id="nums"></div>
+
+  <h2>Nine islands. Nine different answers.</h2>
+  <p class="say">
+    Every dot is one satellite measurement transect, drawn at its true position — together they
+    trace the coastline. Red is losing land, blue is gaining it.
+  </p>
+  <div class="legend">
+    <span class="key"><span class="sw" style="background:var(--erode)"></span>eroding</span>
+    <span class="key"><span class="sw" style="background:var(--neutral)"></span>stable</span>
+    <span class="key"><span class="sw" style="background:var(--grow)"></span>accreting</span>
+  </div>
+  <div class="grid9" id="grid9"></div>
+
+  <h2>The same ocean. Nine different answers.</h2>
+  <p class="say">
+    Sea level is rising at every site and the ocean is warmer at all of them — that forcing is
+    regional and near-uniform. The shoreline response is not, and it is not predicted by how fast
+    the sea is rising (Pearson r = +0.13, p = 0.74). Rows are in the same order in both charts:
+    if sea level decided the outcome, the right chart would echo the left. It does not.
+  </p>
+  <div class="two">
+    <div class="panel"><p class="cap">Sea-level rise, 1993–2023 · mm per year</p>
+      <svg id="slChart"></svg></div>
+    <div class="panel"><p class="cap">Shoreline change, 1999–2023 · metres per year</p>
+      <svg id="respChart"></svg></div>
+  </div>
+
+  <h2>Land is not the same measurement as home.</h2>
+  <div class="stories">
+    <div class="st lost">
+      <p class="tag">Choiseul · Solomon Islands</p>
+      <h4>Five islands are already gone.</h4>
+      <p>Kakatina, Kale, Rapita, Rehana and Zollies — vegetated reef islands of up to five
+      hectares — no longer exist. On Nuatambu, home to 25 families, eleven houses have washed
+      into the sea since 2011 and over half the habitable land has gone. Taro is planning to
+      become the first provincial capital on earth to relocate.</p>
+    </div>
+    <div class="st gain">
+      <p class="tag">Carteret Islands · Papua New Guinea</p>
+      <h4>Its people are leaving land that is growing.</h4>
+      <p>Around 1,700 Carteret Islanders are being moved to Bougainville by Tulele Peisa, with
+      350 families targeted by 2027. The shoreline here is advancing at +0.33 metres a year.
+      They are not leaving because the island shrank. They are leaving because the wells turned
+      salty and the gardens stopped growing.</p>
+    </div>
+    <div class="st">
+      <p class="tag">Vunidogoloa · Fiji</p>
+      <h4>Moved two kilometres inland, 2014.</h4>
+      <p>The first village in Fiji relocated for climate change. About 140 people left 26 houses
+      on the foreshore for 33 new homes on higher ground, at a cost near FJ$1 million. More than
+      80 other Fijian communities have since been identified as at risk.</p>
+    </div>
+  </div>
+
+  <div class="close">
+    <p>Sea level is rising under all of us. What it costs is decided locally — by the reef, the
+    sediment, the storms, and where we were able to build. Adaptation planned on a regional
+    average will protect the wrong coast. <b>Ask which island. Then ask who lives there.</b></p>
+  </div>
+</div>
+
+<footer>
+  <b>Shoreline:</b> Annual Shorelines (Landsat, 30 m), Digital Earth Pacific, <code>dep_ls_coastlines</code>,
+  CC-BY-4.0 — stac.digitalearthpacific.org. Transects filtered to certainty “good”; significance p&lt;0.05;
+  observation period 1999–2023. &nbsp;<b>Sea level &amp; sea-surface temperature:</b> Pacific Data Hub .Stat,
+  <code>DF_CLIMATE_CHANGE</code> (SEA_LVL 1993–2023; SST_ANOM, 2014–2023 mean vs 1951–1980 baseline).
+  Both datasets are on the Challenge official list. &nbsp;<b>Relocations:</b> Albert et al. 2016,
+  <i>Environmental Research Letters</i>; PINA 2022; ReliefWeb; Cultural Survival; Ambio 2024 (Vunidogoloa).
+  <br>
+  <b>Method:</b> all rates come from the fixed-transect <code>rates_of_change</code> layer, where each
+  measurement point is quality-controlled independently. Totals derived from annual shoreline geometry are
+  not comparable between years — mapped length grows with Landsat coverage, not with real coastal change.
+  <b>Limits:</b> 30 m pixels are coarse for small motu; the Carteret group yields 251 usable transects of
+  which 36 are statistically significant and should be read as indicative. With nine sites the correlation
+  test can rule out a strong relationship, not a weak one. The five islands lost in Choiseul predate this
+  satellite record and come from Albert et al. (2016).
+</footer>
+
+<script>
+const SVGNS="http://www.w3.org/2000/svg";
+const el=(n,a={})=>{const e=document.createElementNS(SVGNS,n);for(const k in a)e.setAttribute(k,a[k]);return e;};
+const fr=v=>(v>=0?"+":"−")+Math.abs(v).toFixed(2);
+
+function project(pts,S,pad){
+  const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);
+  const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+  const lat=(y0+y1)/2,cs=Math.cos(lat*Math.PI/180);
+  const w=Math.max((x1-x0)*cs,1e-9),h=Math.max(y1-y0,1e-9);
+  const k=(S-2*pad)/Math.max(w,h);
+  const ox=(S-2*pad-w*k)/2,oy=(S-2*pad-h*k)/2;
+  return (x,y)=>[pad+(x-x0)*cs*k+ox,S-pad-(y-y0)*k-oy];
+}
+
+(async function(){
+  const SITES=await (await fetch("data/sites.json")).json();
+  const by=k=>SITES.find(s=>s.site===k);
+
+  const cards=[
+    {k:"choiseul",cls:"",big:"5",u:" islands gone",
+     p:"Kakatina, Kale, Rapita, Rehana and Zollies no longer exist."},
+    {k:"carteret",cls:"g",v:1,p:"Carteret Islands — gaining land while ~1,700 people are relocated."},
+    {k:"funafuti",cls:"g",v:1,p:"Funafuti — the emblem of a drowning nation, advancing."},
+    {k:"tarawa",cls:"e",v:1,p:"Tarawa — named in the same breath, moving the other way."},
+  ];
+  document.getElementById("nums").innerHTML=cards.map(c=>{
+    const r=by(c.k);
+    const big=c.v?`${fr(r.median_rate_m_yr)}<span class="u"> m/yr</span>`
+                 :`${c.big}<span class="u">${c.u}</span>`;
+    return `<div class="num ${c.cls}"><b>${big}</b><p>${c.p}</p></div>`;
+  }).join("");
+
+  const order=[...SITES].sort((a,b)=>a.median_rate_m_yr-b.median_rate_m_yr);
+  const g9=document.getElementById("grid9");
+  for(const s of order){
+    const d=document.createElement("div"); d.className="isl";
+    const col=s.median_rate_m_yr>=0?"var(--grow)":"var(--erode)";
+    d.innerHTML=`<h3>${s.label}</h3><p class="sm">${s.country}</p>
+                 <p class="rt" style="color:${col}">${fr(s.median_rate_m_yr)} m/yr</p>`;
+    g9.appendChild(d);
+    let t=null; try{ t=await (await fetch(`data/t_${s.site}.json`)).json(); }catch{}
+    if(!t) continue;
+    const pts=t.lon.map((x,i)=>[x,t.lat[i]]);
+    const S=200,pad=8,proj=project(pts,S,pad);
+    const svg=el("svg",{viewBox:`0 0 ${S} ${S}`});
+    const rB=Math.max(1.1,Math.min(3.2,72/Math.sqrt(t.lon.length)));
+    for(let i=0;i<t.lon.length;i++){
+      const v=t.rate[i],[px,py]=proj(t.lon[i],t.lat[i]);
+      const q=Math.max(-1,Math.min(1,v/0.6));
+      const c=Math.abs(q)<0.12?"var(--neutral)":(q>0?"var(--grow)":"var(--erode)");
+      svg.appendChild(el("circle",{cx:px.toFixed(1),cy:py.toFixed(1),
+        r:rB.toFixed(2),fill:c,"fill-opacity":(0.45+0.55*Math.abs(q)).toFixed(2)}));
+    }
+    d.appendChild(svg);
+  }
+
+  function bars(id,acc,o){
+    const data=[...SITES].sort((a,b)=>a.median_rate_m_yr-b.median_rate_m_yr);
+    const W=250,rowH=9.4,padL=68,padR=26,padT=3,padB=12;
+    const H=padT+data.length*rowH+padB;
+    const svg=document.getElementById(id);
+    svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+    const vals=data.map(acc),lo=Math.min(0,...vals),hi=Math.max(0,...vals),sp=(hi-lo)||1;
+    const x=v=>padL+((v-lo)/sp)*(W-padL-padR);
+    o.ticks.forEach(t=>{
+      svg.appendChild(el("line",{class:"grid-line",x1:x(t),x2:x(t),y1:padT-2,y2:H-padB}));
+      const l=el("text",{class:"tick",x:x(t),y:H-padB+8,"text-anchor":"middle","font-size":"3.0"});
+      l.textContent=t; svg.appendChild(l);
+    });
+    data.forEach((d,i)=>{
+      const v=acc(d),y=padT+i*rowH,h=8.5;
+      const nm=el("text",{class:"lbl",x:padL-5,y:y+h-1,"text-anchor":"end","font-size":"3.5"});
+      nm.textContent=o.label(d); svg.appendChild(nm);
+      const x0=x(Math.max(lo,0)),x1=x(v);
+      svg.appendChild(el("rect",{x:Math.min(x0,x1),y,width:Math.max(Math.abs(x1-x0),1.2),
+        height:h,rx:2,fill:o.fill(v)}));
+      const t=el("text",{class:"val",x:Math.max(x0,x1)+3.5,y:y+h-1,"font-size":"3.2"});
+      t.textContent=o.fmt(v); svg.appendChild(t);
+    });
+    if(lo<0) svg.appendChild(el("line",{class:"zero-line",x1:x(0),x2:x(0),y1:padT-2,y2:H-padB}));
+  }
+  bars("slChart",d=>d.sea_level_mm_yr,{ticks:[0,2,4],fill:()=>"var(--neutral)",
+    fmt:v=>`+${v.toFixed(1)}`,label:d=>d.territory??d.country});
+  bars("respChart",d=>d.median_rate_m_yr,{ticks:[-0.2,0,0.2,0.4],
+    fill:v=>v>=0?"var(--grow)":"var(--erode)",fmt:v=>fr(v),label:d=>d.label});
+
+  document.body.dataset.ready="1";
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+{
+  "carteret": {
+    "status": "relocating",
+    "headline": "Its people are leaving. Its shoreline is gaining land.",
+    "body": "Around 1,700 Carteret Islanders are being moved to mainland Bougainville by Tulele Peisa, the community organisation founded by Ursula Rakova. An earlier government resettlement moved 10 families in 1984; they returned by 1989. The Catholic Church provided 25 hectares at Tinputz, enough for about 100 people, with further land at Tearouki and Mabiri. In 2022 the programme was seeking K14 million to move 350 families by 2027. The islanders are not leaving because the land disappeared. They are leaving because saltwater ruined the gardens and the wells.",
+    "facts": [
+      ["People to be relocated", "~1,700"],
+      ["Families targeted by 2027", "350"],
+      ["First attempt", "1984 — 10 families, returned by 1989"],
+      ["Destination", "Tinputz, Tearouki, Mabiri (Bougainville)"]
+    ],
+    "sources": [
+      ["Carteret Island needs K14 million to move 350 families by 2027 — PINA, 2022", "https://pina.com.fj/2022/11/24/carteret-island-needs-k14-million-to-move-350-families-by-2027/"],
+      ["Carteret Island climate refugees make a new home — ReliefWeb", "https://reliefweb.int/report/papua-new-guinea/carteret-island-climate-refugees-make-new-home"],
+      ["Strengthening Our Ancestral Community Across the Seas — Cultural Survival", "https://www.culturalsurvival.org/publications/cultural-survival-quarterly/strengthening-our-ancestral-community-across-seas"]
+    ]
+  },
+  "natewa": {
+    "status": "relocated",
+    "headline": "Fiji's first village moved for the climate.",
+    "body": "Vunidogoloa, on Natewa Bay, relocated two kilometres inland in January 2014 — the first village in Fiji moved because of climate change. About 140 people lived in 26 houses on the foreshore; 33 new homes were built on higher ground at a cost of roughly FJ$1 million. The village left because of coastal erosion, saltwater intrusion and repeated flooding. More than 80 other Fijian communities have since been identified as at risk.",
+    "facts": [
+      ["Relocated", "January 2014"],
+      ["People", "~140, in 26 foreshore houses"],
+      ["New village", "33 homes, 2 km inland"],
+      ["Cost", "~FJ$1 million (~US$500,000)"],
+      ["Other Fijian communities at risk", "80+"]
+    ],
+    "sources": [
+      ["Climate change and the planned relocation of people: a longitudinal analysis of Vunidogoloa, Fiji — Ambio, 2024", "https://link.springer.com/article/10.1007/s13280-024-02120-6"],
+      ["Fiji's first climate change village moved from seashore to 'promised land' — Pacific Climate Change Portal", "https://www.pacificclimatechange.net/news/fijis-first-climate-change-village-moved-seashore-promised-land"],
+      ["Climate change forced these Fijian communities to move — The Conversation", "https://theconversation.com/climate-change-forced-these-fijian-communities-to-move-and-with-80-more-at-risk-heres-what-they-learned-116178"]
+    ]
+  },
+  "choiseul": {
+    "status": "islands lost",
+    "headline": "Five islands here are already gone.",
+    "body": "In Choiseul Province, five vegetated reef islands — Kakatina, Kale, Rapita, Rehana and Zollies, each up to five hectares — have disappeared entirely. On Nuatambu, home to 25 families, eleven houses have washed into the sea since 2011 and more than half the habitable land is gone. Taro, the provincial capital, is planning to become the first provincial capital in the world to relocate because of sea-level rise. The regional average conceals this: land can vanish completely in one province while the wider region gains.",
+    "facts": [
+      ["Islands lost entirely", "5 — Kakatina, Kale, Rapita, Rehana, Zollies"],
+      ["Nuatambu", "25 families; 11 houses lost since 2011"],
+      ["Nuatambu habitable land lost", "more than half"],
+      ["Taro", "first provincial capital worldwide planning relocation"]
+    ],
+    "sources": [
+      ["Albert et al. 2016, Environmental Research Letters — 33 islands, imagery 1947–2014", "https://iopscience.iop.org/article/10.1088/1748-9326/11/5/054011"],
+      ["Rising sea levels blamed for the disappearance of five reef islands — ABC News", "https://www.abc.net.au/news/2016-05-07/rising-sea-levels-blamed-for-wiping-out-five-islands/7392986"],
+      ["Five Pacific islands have already disappeared — Mongabay", "https://news.mongabay.com/2016/05/five-pacific-islands-already-disappeared-due-sea-level-rise/"]
+    ]
+  },
+  "funafuti": {
+    "status": "staying",
+    "headline": "The emblem of the drowning Pacific is gaining land.",
+    "body": "Funafuti is the image the world uses for a nation going under. Across 1,385 quality-controlled transects the median shoreline is advancing at 0.21 metres a year, and independent research has found Tuvalu's land area grew over recent decades. This is not a reprieve. A reef island keeps its area by rebuilding from coral debris and by moving — the sand goes somewhere new. Groundwater still salts up, king tides still flood the runway, and a house cannot rebuild itself the way a beach can.",
+    "facts": [
+      ["Median shoreline change", "+0.21 m/yr"],
+      ["Transects measured", "1,385 (769 statistically significant)"],
+      ["Transects eroding", "33.9%"]
+    ],
+    "sources": []
+  },
+  "tarawa": {
+    "status": "eroding",
+    "headline": "Told in the same sentence as Funafuti. Moving the other way.",
+    "body": "South Tarawa is the other island the world names when it says the Pacific is sinking — and unlike Funafuti it is losing ground, with 65% of transects eroding and a median rate of −0.17 metres a year. It is also one of the most densely populated places in the Pacific. Two islands, one sentence, opposite measurements.",
+    "facts": [
+      ["Median shoreline change", "−0.17 m/yr"],
+      ["Transects eroding", "65.4%"],
+      ["Transects measured", "1,621 (659 statistically significant)"]
+    ],
+    "sources": []
+  }
+}

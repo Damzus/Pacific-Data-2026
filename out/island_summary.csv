@@ -1,0 +1,10 @@
+site,label,country,group,n_good,n_sig,pct_sig,median_rate_m_yr,mean_rate_m_yr,median_sig_rate_m_yr,pct_eroding,pct_sig_eroding,median_sce_m,p90_sce_m,median_net_m,churn_ratio,rate_p10,rate_p90,median_valid_span_yr
+tarawa,Tarawa,Kiribati,Micronesia,1621,659,40.7,-0.168,0.065,-0.49,65.4,73.7,19.0,50.6,-3.6,5.2,-0.83,0.41,21
+natewa,Natewa Bay (Vunidogoloa),Fiji,Melanesia,907,350,38.6,-0.105,-0.096,-0.357,63.7,62.9,16.6,32.7,-2.1,7.8,-0.59,0.4,20
+kayangel,Kayangel,Palau,Micronesia,238,38,16.0,-0.019,0.067,0.646,52.1,47.4,40.8,77.0,-0.5,85.9,-0.61,0.82,25
+choiseul,Choiseul (Nuatambu),Solomon Islands,Melanesia,204,72,35.3,0.037,-0.015,0.258,42.6,41.7,16.9,42.4,0.9,18.3,-0.73,0.56,25
+nanumea,Nanumea,Tuvalu,Polynesia,351,129,36.8,0.097,0.11,0.34,36.2,37.2,19.1,44.6,2.4,7.9,-0.38,0.6,25
+wallis,Wallis (Uvea),Wallis and Futuna,Polynesia,600,145,24.2,0.109,0.553,0.327,30.2,14.5,20.2,75.6,2.7,7.4,-0.19,0.62,25
+funafuti,Funafuti,Tuvalu,Polynesia,1385,769,55.5,0.209,0.413,0.622,33.9,27.0,23.3,63.4,4.8,4.9,-0.46,1.5,25
+carteret,Carteret Islands,Papua New Guinea,Melanesia,251,36,14.3,0.334,0.342,0.783,23.1,0.0,51.5,82.0,8.3,6.2,-0.19,0.8,25
+majuro,Majuro,Marshall Islands,Micronesia,433,202,46.7,0.439,10.715,0.925,27.7,13.4,40.9,2602.8,10.9,3.8,-0.5,52.12,25

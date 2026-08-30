@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Island Stays, the Village Goes — Pacific shoreline change, 1999–2023</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-0:#f5f4f1; --surface-1:#fcfcfb; --surface-2:#f0efec; --border:#dcdbd6;
+    --text-primary:#0b0b0b; --text-secondary:#52514e; --text-muted:#86857e;
+    --erode:#e34948; --grow:#2a78d6; --neutral:#b9b8b2; --grid:#e5e4e0;
+    --seq-0:#cde2fb; --seq-1:#86b6ef; --seq-2:#3987e5; --seq-3:#256abf; --seq-4:#0d366b;
+    --hi:#0b0b0b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --surface-0:#121211; --surface-1:#1a1a19; --surface-2:#232322; --border:#383835;
+      --text-primary:#ffffff; --text-secondary:#c3c2b7; --text-muted:#8f8e85;
+      --erode:#e66767; --grow:#3987e5; --neutral:#55554f; --grid:#2b2b29;
+      --seq-0:#184f95; --seq-1:#2a78d6; --seq-2:#5598e7; --seq-3:#9ec5f4; --seq-4:#cde2fb;
+      --hi:#ffffff;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --surface-0:#121211; --surface-1:#1a1a19; --surface-2:#232322; --border:#383835;
+    --text-primary:#ffffff; --text-secondary:#c3c2b7; --text-muted:#8f8e85;
+    --erode:#e66767; --grow:#3987e5; --neutral:#55554f; --grid:#2b2b29;
+    --seq-0:#184f95; --seq-1:#2a78d6; --seq-2:#5598e7; --seq-3:#9ec5f4; --seq-4:#cde2fb;
+    --hi:#ffffff;
+  }
+
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--surface-0); color:var(--text-primary);
+         font:15px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+         -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:1160px; margin:0 auto; padding:34px 24px 100px; }
+  header { border-bottom:1px solid var(--border); padding-bottom:30px; margin-bottom:14px; }
+  .eyebrow { font-size:12px; letter-spacing:.09em; text-transform:uppercase;
+             color:var(--text-muted); margin:0 0 12px; }
+  h1 { font-size:clamp(30px,5vw,50px); line-height:1.05; margin:0 0 16px;
+       letter-spacing:-.025em; font-weight:660; }
+  .byline { display:flex; flex-wrap:wrap; gap:0 10px; margin:0 0 18px; padding:0;
+            font-size:14px; color:var(--text-primary); font-weight:560; }
+  .byline span + span::before { content:"·"; color:var(--text-muted);
+            margin-right:10px; font-weight:400; }
+  .lede { font-size:17.5px; color:var(--text-secondary); max-width:64ch; margin:0; }
+  h2 { font-size:21px; margin:0 0 5px; font-weight:630; letter-spacing:-.012em; }
+  .sub { font-size:13.5px; color:var(--text-secondary); margin:0 0 20px; max-width:70ch; }
+  section { margin-bottom:56px; }
+  section.first { margin-top:44px; }
+
+  .tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px; }
+  .tile { background:var(--surface-1); border:1px solid var(--border);
+          border-radius:11px; padding:20px 22px; }
+  .tile .name { font-size:13.5px; font-weight:600; }
+  .tile .place { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .tile .big { font-size:42px; font-weight:670; letter-spacing:-.035em; line-height:1;
+               font-variant-numeric:tabular-nums; }
+  .tile .unit { font-size:14px; color:var(--text-secondary); font-weight:400; margin-left:3px; }
+  .tile .note { font-size:12.5px; color:var(--text-secondary); margin-top:12px; }
+  .tile.erode .big { color:var(--erode); }
+  .tile.grow  .big { color:var(--grow); }
+  .tile.lost  .big { color:var(--text-primary); font-size:34px; }
+
+  .legend { display:flex; gap:18px; align-items:center; flex-wrap:wrap;
+            font-size:12.5px; color:var(--text-secondary); margin-bottom:14px; }
+  .key { display:inline-flex; align-items:center; gap:7px; }
+  .sw { width:11px; height:11px; border-radius:3px; display:inline-block; }
+  .ramp { display:inline-flex; height:11px; border-radius:3px; overflow:hidden; width:96px; }
+  .ramp i { flex:1; }
+
+  .panel { background:var(--surface-1); border:1px solid var(--border);
+           border-radius:11px; padding:20px 18px 12px; }
+  svg { display:block; width:100%; height:auto; overflow:visible; }
+  .grid-line { stroke:var(--grid); stroke-width:1; }
+  .zero-line { stroke:var(--text-muted); stroke-width:1.5; }
+  .tick { font-size:11px; fill:var(--text-muted); }
+  .lbl { font-size:12.5px; fill:var(--text-primary); }
+  .val { font-size:12px; fill:var(--text-secondary); font-variant-numeric:tabular-nums; }
+  .row:hover .bar { opacity:.78; }
+  .row.sel .lbl { font-weight:670; }
+
+  /* explorer */
+  .explorer { display:grid; grid-template-columns:1fr 340px; gap:16px; align-items:start; }
+  @media (max-width:900px) { .explorer { grid-template-columns:1fr; } }
+  .stage { background:var(--surface-1); border:1px solid var(--border);
+           border-radius:11px; padding:14px; position:relative; }
+  .stage svg { background:transparent; }
+  .picker { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:14px; }
+  .chip { border:1px solid var(--border); background:var(--surface-1); color:var(--text-secondary);
+          border-radius:999px; padding:6px 13px; font-size:12.5px; cursor:pointer;
+          font-family:inherit; transition:.12s; }
+  .chip:hover { border-color:var(--text-muted); color:var(--text-primary); }
+  .chip[aria-pressed="true"] { background:var(--text-primary); color:var(--surface-1);
+                               border-color:var(--text-primary); font-weight:560; }
+  .controls { display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+              margin-top:12px; padding-top:12px; border-top:1px solid var(--border); }
+  .btn { border:1px solid var(--border); background:var(--surface-2); color:var(--text-primary);
+         border-radius:7px; padding:6px 13px; font-size:12.5px; cursor:pointer;
+         font-family:inherit; min-width:64px; }
+  .btn:hover { border-color:var(--text-muted); }
+  input[type=range] { flex:1; min-width:150px; accent-color:var(--grow); }
+  .yr { font-variant-numeric:tabular-nums; font-weight:640; font-size:15px; min-width:46px; }
+  .cbx { display:inline-flex; align-items:center; gap:6px; font-size:12.5px;
+         color:var(--text-secondary); cursor:pointer; }
+  .story { background:var(--surface-1); border:1px solid var(--border);
+           border-radius:11px; padding:20px; }
+  .story .badge { display:inline-block; font-size:11px; text-transform:uppercase;
+                  letter-spacing:.07em; padding:3px 9px; border-radius:999px;
+                  background:var(--surface-2); color:var(--text-secondary); margin-bottom:11px; }
+  .story h3 { font-size:17px; margin:0 0 10px; line-height:1.25; letter-spacing:-.01em; }
+  .story p { font-size:13.5px; color:var(--text-secondary); margin:0 0 14px; }
+  .facts { list-style:none; padding:0; margin:0 0 14px; }
+  .facts li { display:flex; justify-content:space-between; gap:12px; font-size:12.5px;
+              padding:6px 0; border-bottom:1px solid var(--border); }
+  .facts li span:first-child { color:var(--text-muted); }
+  .facts li span:last-child { text-align:right; font-weight:560; }
+  .srcs { font-size:11.5px; color:var(--text-muted); }
+  .srcs a { color:var(--text-secondary); display:block; margin-bottom:4px; }
+  .statline { display:flex; gap:20px; flex-wrap:wrap; margin-bottom:14px; }
+  .statline div { font-size:12px; color:var(--text-muted); }
+  .statline b { display:block; font-size:19px; color:var(--text-primary);
+                font-variant-numeric:tabular-nums; font-weight:640; }
+
+  #tt { position:fixed; pointer-events:none; opacity:0; transition:opacity .1s;
+        background:var(--surface-1); border:1px solid var(--border); border-radius:8px;
+        padding:9px 11px; font-size:12.5px; box-shadow:0 4px 18px rgba(0,0,0,.18);
+        z-index:50; max-width:270px; }
+  #tt .t { font-weight:630; margin-bottom:3px; }
+  #tt .r { color:var(--text-secondary); font-variant-numeric:tabular-nums; }
+
+  table { border-collapse:collapse; width:100%; font-size:13px; }
+  th,td { text-align:right; padding:7px 10px; border-bottom:1px solid var(--border);
+          font-variant-numeric:tabular-nums; }
+  th:first-child,td:first-child { text-align:left; font-variant-numeric:normal; }
+  th { font-weight:600; color:var(--text-secondary); font-size:12px;
+       text-transform:uppercase; letter-spacing:.05em; }
+  tr.sel { background:var(--surface-2); }
+
+  .toggle { position:fixed; top:16px; right:16px; background:var(--surface-1);
+            border:1px solid var(--border); color:var(--text-secondary);
+            border-radius:7px; padding:6px 11px; font-size:12.5px; cursor:pointer; z-index:60; }
+  footer { border-top:1px solid var(--border); padding-top:22px; font-size:12.5px;
+           color:var(--text-muted); }
+  footer a { color:var(--text-secondary); }
+  .pull { border-left:3px solid var(--neutral); padding:14px 18px; margin:0 0 22px;
+          background:var(--surface-2); border-radius:0 9px 9px 0;
+          font-size:15px; color:var(--text-primary); max-width:68ch; }
+  .loading { color:var(--text-muted); font-size:13px; padding:60px 0; text-align:center; }
+  .twin { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:820px) { .twin { grid-template-columns:1fr; } }
+  .cap { font-size:12px; color:var(--text-secondary); margin-bottom:10px; font-weight:560; }
+</style>
+</head>
+<body>
+<button class="toggle" id="themeBtn">Theme</button>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Pacific Dataviz Challenge 2026 · Climate change</p>
+  <h1>The island stays.<br>The village goes.</h1>
+  <p class="byline"><span>Saurab Nand</span><span>Mohammed Junaid Hanif</span><span>Karan Parmar</span></p>
+  <p class="lede">
+    “The Pacific is sinking” is one sentence stretched over thousands of islands that are doing
+    opposite things. Twenty-five years of satellite shoreline measurements say that in Choiseul
+    five islands vanished completely — while in the Carterets, whose people are being evacuated,
+    the shoreline is gaining land. Land area and habitability are not the same measurement.
+  </p>
+</header>
+
+<section class="first">
+  <div class="pull">
+    Whether people can stay is not decided by how much land there is. It is decided by whether
+    the wells are fresh, the gardens grow, and the sea stays out of the house.
+  </div>
+  <div class="tiles" id="tiles"></div>
+</section>
+
+<section>
+  <h2>Explore an island</h2>
+  <p class="sub">
+    Every dot is one measurement transect at its true position — together they draw the coastline.
+    The lines behind them are the mapped shoreline in each year, oldest pale to newest dark.
+    Drag the year, or press play, to watch the record fill in.
+  </p>
+  <div class="picker" id="picker" role="group" aria-label="Choose an island"></div>
+  <div class="explorer">
+    <div class="stage">
+      <div id="stageBody"><div class="loading">Loading…</div></div>
+      <div class="controls">
+        <button class="btn" id="playBtn" aria-label="Play year animation">Play</button>
+        <span class="yr" id="yrLabel">—</span>
+        <input type="range" id="yrRange" min="0" max="0" value="0" aria-label="Year">
+        <label class="cbx"><input type="checkbox" id="sigOnly"> significant only (p&lt;0.05)</label>
+        <label class="cbx"><input type="checkbox" id="showLines" checked> shoreline traces</label>
+      </div>
+      <p id="coverNote" class="srcs" style="margin:10px 0 0"></p>
+      <div class="legend" style="margin:12px 0 0">
+        <span class="key"><span class="sw" style="background:var(--erode)"></span>eroding</span>
+        <span class="key"><span class="sw" style="background:var(--neutral)"></span>stable</span>
+        <span class="key"><span class="sw" style="background:var(--grow)"></span>accreting</span>
+        <span class="key"><span class="ramp"><i style="background:var(--seq-0)"></i><i style="background:var(--seq-1)"></i><i style="background:var(--seq-2)"></i><i style="background:var(--seq-3)"></i><i style="background:var(--seq-4)"></i></span>1999→2023</span>
+      </div>
+    </div>
+    <div class="story" id="story"></div>
+  </div>
+</section>
+
+<section>
+  <h2>Nine islands, nine different answers</h2>
+  <p class="sub">
+    Median rate of shoreline change per site. Right of zero is gaining land, left is losing it.
+    Click a bar to load that island above.
+  </p>
+  <div class="legend">
+    <span class="key"><span class="sw" style="background:var(--erode)"></span>losing land</span>
+    <span class="key"><span class="sw" style="background:var(--grow)"></span>gaining land</span>
+    <span style="color:var(--text-muted)">metres per year</span>
+  </div>
+  <div class="panel"><svg id="rateChart" role="img"
+    aria-label="Median shoreline change rate by site, metres per year"></svg></div>
+</section>
+
+<section>
+  <h2>The same ocean. Nine different answers.</h2>
+  <p class="sub">
+    Sea level is rising at every one of these sites and the ocean is warmer at all of them.
+    That forcing is regional and near-uniform — the spread is 3.8 to 5.4 millimetres a year.
+    The shoreline response is not: it runs from −0.17 to +0.44 metres a year, and it is
+    <strong>not predicted by how fast the sea is rising</strong>
+    (Pearson r&nbsp;=&nbsp;+0.13, p&nbsp;=&nbsp;0.74). Rows are in the same order in both
+    charts — if sea level set the outcome, the right-hand chart would echo the left.
+  </p>
+  <div class="twin">
+    <div class="panel">
+      <div class="cap">Sea-level rise, 1993–2023 · millimetres per year</div>
+      <svg id="slChart" role="img" aria-label="Sea level rise by territory"></svg>
+    </div>
+    <div class="panel">
+      <div class="cap">Shoreline change, 1999–2023 · metres per year</div>
+      <svg id="respChart" role="img" aria-label="Shoreline change rate by site"></svg>
+    </div>
+  </div>
+  <p class="srcs" style="margin-top:12px">
+    With nine sites this comparison can rule out a strong relationship, not a weak one.
+    Sea level and sea-surface temperature: Pacific Data Hub .Stat,
+    <code>DF_CLIMATE_CHANGE</code> (SEA_LVL, SST_ANOM), both on the Challenge’s official
+    dataset list. Warming is the 2014–2023 mean against a 1951–1980 baseline.
+  </p>
+</section>
+
+<section>
+  <h2>How far it moved vs. where it ended up</h2>
+  <p class="sub">
+    The grey bar is the full range each shoreline swept across 25 years. The dot is where it
+    actually finished. Movement is large everywhere and the net result is small — Kayangel swept
+    almost 41 metres to end half a metre from where it began. These coasts are not still; they are
+    churning in place.
+  </p>
+  <div class="legend">
+    <span class="key"><span class="sw" style="background:var(--neutral)"></span>range swept</span>
+    <span class="key"><span class="sw" style="background:var(--grow);border-radius:50%"></span>net change</span>
+    <span style="color:var(--text-muted)">metres</span>
+  </div>
+  <div class="panel"><svg id="churnChart" role="img"
+    aria-label="Shoreline range swept versus net change by site, metres"></svg></div>
+</section>
+
+<section>
+  <h2>The numbers</h2>
+  <p class="sub">Every figure in this piece. Click a row to load that island above.</p>
+  <div class="panel" style="padding:6px 4px 4px"><div id="table"></div></div>
+</section>
+
+<footer>
+  <p><strong>Team:</strong> Saurab Nand · Mohammed Junaid Hanif · Karan Parmar.</p>
+  <p><strong>Shoreline data:</strong> Annual Shorelines (Landsat, 30 m), Digital Earth Pacific,
+  collection <code>dep_ls_coastlines</code>, licence CC-BY-4.0 —
+  <a href="https://stac.digitalearthpacific.org/collections/dep_ls_coastlines">STAC catalogue</a>.
+  Transects filtered to <code>certainty&nbsp;=&nbsp;"good"</code>; significance is
+  <code>p&nbsp;&lt;&nbsp;0.05</code>. Observation period 1999–2023.</p>
+  <p><strong>Method:</strong> all figures come from the fixed-transect <code>rates_of_change</code>
+  layer, where each measurement point is quality-controlled independently. Totals derived from
+  annual shoreline geometry are <em>not</em> comparable between years — mapped shoreline length
+  grows with Landsat coverage, not with real coastal change. Relocation figures are sourced
+  per island in the panel above.</p>
+  <p><strong>Known limits:</strong> 30 m pixels are coarse for small motu, so short transect
+  records carry real uncertainty; the Carteret group yields only 251 usable transects, of which
+  36 are statistically significant, and should be read as indicative. Five islands lost in
+  Choiseul predate this record and come from Albert et al. (2016).</p>
+</footer>
+
+</div>
+<div id="tt" role="tooltip"></div>
+
+<script>
+const SVGNS = "http://www.w3.org/2000/svg";
+const el = (n, a = {}) => { const e = document.createElementNS(SVGNS, n);
+  for (const k in a) e.setAttribute(k, a[k]); return e; };
+const F = {
+  rate: v => (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(2),
+  m:    v => (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(1) + " m",
+};
+const tt = document.getElementById("tt");
+function showTip(html, e) {
+  tt.innerHTML = html; tt.style.opacity = 1;
+  const r = tt.getBoundingClientRect();
+  let x = e.clientX + 14, y = e.clientY + 14;
+  if (x + r.width  > innerWidth  - 8) x = e.clientX - r.width  - 14;
+  if (y + r.height > innerHeight - 8) y = e.clientY - r.height - 14;
+  tt.style.left = x + "px"; tt.style.top = y + "px";
+}
+const hideTip = () => { tt.style.opacity = 0; };
+
+let SITES = [], current = null, cache = {}, timer = null;
+
+async function getJSON(p) {
+  if (cache[p] !== undefined) return cache[p];
+  try { const r = await fetch(p); cache[p] = r.ok ? await r.json() : null; }
+  catch { cache[p] = null; }
+  return cache[p];
+}
+
+/* ---------- tiles ---------- */
+function drawTiles() {
+  const host = document.getElementById("tiles");
+  const get = k => SITES.find(s => s.site === k);
+  const cards = [
+    { k: "choiseul", cls: "lost", big: "5 islands", unit: "gone",
+      name: "Choiseul", place: "Solomon Islands",
+      note: "Kakatina, Kale, Rapita, Rehana and Zollies no longer exist. On Nuatambu, 11 houses have gone into the sea since 2011." },
+    { k: "carteret", cls: "grow", name: "Carteret Islands", place: "Papua New Guinea",
+      note: "Around 1,700 people are being relocated to Bougainville — from a shoreline that is gaining land. They are leaving because of salt, not space." },
+    { k: "funafuti", cls: "grow", name: "Funafuti", place: "Tuvalu",
+      note: "The image the world uses for a nation going under. It is advancing." },
+    { k: "tarawa", cls: "erode", name: "Tarawa", place: "Kiribati",
+      note: "Named in the same breath as Funafuti, and moving the opposite way." },
+  ];
+  host.replaceChildren();
+  cards.forEach(c => {
+    const r = get(c.k); if (!r) return;
+    const d = document.createElement("div");
+    d.className = "tile " + c.cls;
+    const big = c.big
+      ? `<div class="big">${c.big}<span class="unit">${c.unit}</span></div>`
+      : `<div class="big">${F.rate(r.median_rate_m_yr)}<span class="unit">m/yr</span></div>`;
+    d.innerHTML = `<div class="name">${c.name}</div><div class="place">${c.place}</div>${big}` +
+      `<div class="note">${c.note}</div>`;
+    d.style.cursor = "pointer";
+    d.addEventListener("click", () => select(c.k, true));
+    host.appendChild(d);
+  });
+}
+
+/* ---------- explorer ---------- */
+function drawPicker() {
+  const p = document.getElementById("picker");
+  p.replaceChildren();
+  SITES.forEach(s => {
+    const b = document.createElement("button");
+    b.className = "chip"; b.textContent = s.label;
+    b.setAttribute("aria-pressed", "false");
+    b.dataset.site = s.site;
+    b.addEventListener("click", () => select(s.site));
+    p.appendChild(b);
+  });
+}
+
+function project(pts, S, pad) {
+  const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs);
+  const y0 = Math.min(...ys), y1 = Math.max(...ys);
+  const lat = (y0 + y1) / 2, cs = Math.cos(lat * Math.PI / 180);
+  const w = Math.max((x1 - x0) * cs, 1e-9), h = Math.max(y1 - y0, 1e-9);
+  const k = (S - 2 * pad) / Math.max(w, h);
+  const ox = (S - 2 * pad - w * k) / 2, oy = (S - 2 * pad - h * k) / 2;
+  return (x, y) => [pad + (x - x0) * cs * k + ox, S - pad - (y - y0) * k - oy];
+}
+
+async function renderStage() {
+  const s = current; if (!s) return;
+  const body = document.getElementById("stageBody");
+  const [tr, sl] = await Promise.all([
+    getJSON(`data/t_${s.site}.json`),
+    s.has_shorelines ? getJSON(`data/s_${s.site}.json`) : null,
+  ]);
+  if (!tr) { body.innerHTML = '<div class="loading">No transect data for this island.</div>'; return; }
+
+  const years = sl ? Object.keys(sl).map(Number).sort((a, b) => a - b) : [];
+  const range = document.getElementById("yrRange");
+  range.max = Math.max(years.length - 1, 0);
+  if (+range.value > +range.max) range.value = range.max;
+  const selYear = years.length ? years[+range.value] : null;
+  document.getElementById("yrLabel").textContent = selYear ?? "—";
+
+  const sigOnly = document.getElementById("sigOnly").checked;
+  const showLines = document.getElementById("showLines").checked;
+
+  const all = [];
+  for (let i = 0; i < tr.lon.length; i++) all.push([tr.lon[i], tr.lat[i]]);
+  if (sl) for (const y of years) for (const seg of sl[y]) for (const c of seg) all.push(c);
+
+  const S = 560, pad = 16;
+  const proj = project(all, S, pad);
+  const svg = el("svg", { viewBox: `0 0 ${S} ${S}` });
+  svg.setAttribute("aria-label", `Shoreline and transects at ${s.label}`);
+
+  const onTop = [];
+  if (sl && showLines) {
+    const steps = ["var(--seq-0)", "var(--seq-1)", "var(--seq-2)", "var(--seq-3)", "var(--seq-4)"];
+    const path = seg => seg.map((c, j) => {
+      const [px, py] = proj(c[0], c[1]);
+      return (j ? "L" : "M") + px.toFixed(1) + " " + py.toFixed(1);
+    }).join("");
+    years.forEach((y, i) => {
+      if (selYear != null && y > selYear) return;
+      const isSel = y === selYear;
+      const col = steps[Math.min(steps.length - 1,
+        Math.floor(i / Math.max(years.length - 1, 1) * (steps.length - 1) + 0.5))];
+      sl[y].forEach(seg => {
+        const node = el("path", {
+          d: path(seg), fill: "none",
+          stroke: isSel ? "var(--hi)" : col,
+          "stroke-width": isSel ? 3 : 1.1,
+          "stroke-opacity": isSel ? 1 : 0.3,
+          "stroke-linecap": "round", "stroke-linejoin": "round",
+        });
+        if (isSel) onTop.push(node); else svg.appendChild(node);
+      });
+    });
+  }
+
+  const cap = 0.6;
+  const nShown = sigOnly ? tr.sig.reduce((a, b) => a + b, 0) : tr.lon.length;
+  const rBase = Math.max(1.7, Math.min(4.4, 95 / Math.sqrt(Math.max(nShown, 1))));
+  for (let i = 0; i < tr.lon.length; i++) {
+    if (sigOnly && !tr.sig[i]) continue;
+    const v = tr.rate[i];
+    const [px, py] = proj(tr.lon[i], tr.lat[i]);
+    const t = Math.max(-1, Math.min(1, v / cap));
+    const col = Math.abs(t) < 0.12 ? "var(--neutral)" : (t > 0 ? "var(--grow)" : "var(--erode)");
+    const c = el("circle", { cx: px.toFixed(1), cy: py.toFixed(1),
+      r: (tr.sig[i] ? rBase : rBase * 0.72).toFixed(2), fill: col,
+      "fill-opacity": (0.4 + 0.6 * Math.abs(t)).toFixed(2) });
+    c.addEventListener("mousemove", e => showTip(
+      `<div class="t">${s.label}</div>
+       <div class="r">Rate ${F.rate(v)} m/yr</div>
+       <div class="r">Swept ${tr.sce[i].toFixed(1)} m</div>
+       <div class="r">${tr.sig[i] ? "Statistically significant" : "Not significant (p≥0.05)"}</div>`, e));
+    c.addEventListener("mouseleave", hideTip);
+    svg.appendChild(c);
+  }
+
+  onTop.forEach(n => svg.appendChild(n));
+
+  const shown = nShown;
+  document.getElementById("coverNote").textContent = years.length
+    ? `Shoreline traces cover ${years[0]}–${years[years.length - 1]} ` +
+      `(${years.length} of 25 years pass the quality filter at this site). ` +
+      `Transect rates always use the full 1999–2023 record.`
+    : "No quality-controlled shoreline linework at this site; transect rates still apply.";
+  body.replaceChildren();
+  const head = document.createElement("div");
+  head.className = "statline";
+  head.innerHTML =
+    `<div><b>${F.rate(s.median_rate_m_yr)}</b>median m/yr</div>
+     <div><b>${s.pct_eroding}%</b>transects eroding</div>
+     <div><b>${s.median_sce_m}</b>metres swept</div>
+     <div><b>${shown.toLocaleString()}</b>transects shown</div>`;
+  body.appendChild(head);
+  body.appendChild(svg);
+}
+
+function renderStory() {
+  const s = current, host = document.getElementById("story");
+  const r = s.relocation;
+  if (!r) {
+    host.innerHTML =
+      `<div class="badge">measured</div><h3>${s.label}</h3>
+       <p>${s.country}. Median shoreline change ${F.rate(s.median_rate_m_yr)} metres a year across
+       ${s.n_good.toLocaleString()} quality-controlled transects, of which
+       ${s.n_sig.toLocaleString()} are statistically significant. The shoreline swept a median
+       range of ${s.median_sce_m} metres to finish ${F.m(s.median_net_m)} from where it started.</p>
+       <p style="color:var(--text-muted)">No documented planned relocation at this site.</p>`;
+    return;
+  }
+  host.innerHTML =
+    `<div class="badge">${r.status}</div><h3>${r.headline}</h3><p>${r.body}</p>` +
+    (r.facts?.length ? `<ul class="facts">${r.facts.map(f =>
+      `<li><span>${f[0]}</span><span>${f[1]}</span></li>`).join("")}</ul>` : "") +
+    (r.sources?.length ? `<div class="srcs">${r.sources.map(x =>
+      `<a href="${x[1]}" target="_blank" rel="noopener">${x[0]}</a>`).join("")}</div>` : "");
+}
+
+function select(key, scroll) {
+  const s = SITES.find(x => x.site === key); if (!s) return;
+  current = s;
+  stopPlay();
+  document.querySelectorAll("#picker .chip").forEach(c =>
+    c.setAttribute("aria-pressed", String(c.dataset.site === key)));
+  document.querySelectorAll("#rateChart .row").forEach(g =>
+    g.classList.toggle("sel", g.dataset.site === key));
+  document.querySelectorAll("#table tr").forEach(tr =>
+    tr.classList.toggle("sel", tr.dataset.site === key));
+  document.getElementById("yrRange").value = 0;
+  renderStory(); renderStage();
+  if (scroll) document.querySelector(".explorer").scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function stopPlay() {
+  if (timer) { clearInterval(timer); timer = null; document.getElementById("playBtn").textContent = "Play"; }
+}
+document.getElementById("playBtn").addEventListener("click", () => {
+  if (timer) return stopPlay();
+  const range = document.getElementById("yrRange");
+  if (+range.max === 0) return;
+  document.getElementById("playBtn").textContent = "Pause";
+  timer = setInterval(() => {
+    range.value = (+range.value + 1) > +range.max ? 0 : +range.value + 1;
+    renderStage();
+  }, 480);
+});
+document.getElementById("yrRange").addEventListener("input", () => { stopPlay(); renderStage(); });
+document.getElementById("sigOnly").addEventListener("change", renderStage);
+document.getElementById("showLines").addEventListener("change", renderStage);
+
+/* ---------- charts ---------- */
+function drawRates() {
+  const data = [...SITES].sort((a, b) => a.median_rate_m_yr - b.median_rate_m_yr);
+  const W = 900, rowH = 34, padL = 195, padR = 82, padT = 26, padB = 34;
+  const H = padT + data.length * rowH + padB;
+  const svg = document.getElementById("rateChart");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.replaceChildren();
+  const max = Math.max(...data.map(d => Math.abs(d.median_rate_m_yr))) * 1.25;
+  const x = v => padL + ((v + max) / (2 * max)) * (W - padL - padR);
+
+  for (let t = -0.4; t <= 0.41; t += 0.2) {
+    const v = Math.round(t * 10) / 10;
+    svg.appendChild(el("line", { class: "grid-line", x1: x(v), x2: x(v), y1: padT - 8, y2: H - padB }));
+    const l = el("text", { class: "tick", x: x(v), y: H - padB + 16, "text-anchor": "middle" });
+    l.textContent = v.toFixed(1); svg.appendChild(l);
+  }
+  const ax = el("text", { class: "tick", x: (padL + W - padR) / 2, y: H - 2, "text-anchor": "middle" });
+  ax.textContent = "median shoreline change (metres per year)"; svg.appendChild(ax);
+
+  data.forEach((d, i) => {
+    const y = padT + i * rowH, h = 15, grow = d.median_rate_m_yr >= 0;
+    const g = el("g", { class: "row" }); g.dataset.site = d.site;
+    g.style.cursor = "pointer";
+    const nm = el("text", { class: "lbl", x: padL - 12, y: y + h - 3, "text-anchor": "end" });
+    nm.textContent = d.label; g.appendChild(nm);
+    const x0 = x(0), x1 = x(d.median_rate_m_yr);
+    g.appendChild(el("rect", { class: "bar", x: Math.min(x0, x1), y,
+      width: Math.max(Math.abs(x1 - x0), 2), height: h, rx: 4,
+      fill: grow ? "var(--grow)" : "var(--erode)" }));
+    g.appendChild(el("rect", { x: x0 - 1, y: y - 3, width: 2, height: h + 6, fill: "var(--surface-1)" }));
+    const v = el("text", { class: "val", x: grow ? x1 + 8 : x1 - 8, y: y + h - 3,
+      "text-anchor": grow ? "start" : "end" });
+    v.textContent = F.rate(d.median_rate_m_yr); g.appendChild(v);
+    const hit = el("rect", { x: 0, y: y - 6, width: W, height: rowH, fill: "transparent" });
+    hit.addEventListener("mousemove", e => showTip(
+      `<div class="t">${d.label}</div><div class="r">${d.country}</div>
+       <div class="r">Median ${F.rate(d.median_rate_m_yr)} m/yr</div>
+       <div class="r">${d.pct_eroding}% eroding</div>
+       <div class="r">${d.n_sig.toLocaleString()} of ${d.n_good.toLocaleString()} significant</div>
+       <div class="r" style="margin-top:4px;color:var(--text-muted)">click to explore</div>`, e));
+    hit.addEventListener("mouseleave", hideTip);
+    hit.addEventListener("click", () => select(d.site, true));
+    g.appendChild(hit); svg.appendChild(g);
+  });
+  svg.appendChild(el("line", { class: "zero-line", x1: x(0), x2: x(0), y1: padT - 8, y2: H - padB }));
+}
+
+function drawChurn() {
+  const data = [...SITES].sort((a, b) => b.median_sce_m - a.median_sce_m);
+  const W = 900, rowH = 34, padL = 195, padR = 92, padT = 26, padB = 34;
+  const H = padT + data.length * rowH + padB;
+  const svg = document.getElementById("churnChart");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.replaceChildren();
+  const max = Math.max(...data.map(d => d.median_sce_m)) * 1.12;
+  const x = v => padL + (v / max) * (W - padL - padR);
+  for (let t = 0; t <= max; t += 10) {
+    svg.appendChild(el("line", { class: "grid-line", x1: x(t), x2: x(t), y1: padT - 8, y2: H - padB }));
+    const l = el("text", { class: "tick", x: x(t), y: H - padB + 16, "text-anchor": "middle" });
+    l.textContent = t; svg.appendChild(l);
+  }
+  const ax = el("text", { class: "tick", x: (padL + W - padR) / 2, y: H - 2, "text-anchor": "middle" });
+  ax.textContent = "metres"; svg.appendChild(ax);
+
+  data.forEach((d, i) => {
+    const y = padT + i * rowH, h = 15;
+    const g = el("g", { class: "row" }); g.dataset.site = d.site; g.style.cursor = "pointer";
+    const nm = el("text", { class: "lbl", x: padL - 12, y: y + h - 3, "text-anchor": "end" });
+    nm.textContent = d.label; g.appendChild(nm);
+    g.appendChild(el("rect", { class: "bar", x: x(0), y,
+      width: Math.max(x(d.median_sce_m) - x(0), 2), height: h, rx: 4, fill: "var(--neutral)" }));
+    g.appendChild(el("circle", { cx: x(Math.abs(d.median_net_m)), cy: y + h / 2, r: 5.5,
+      fill: d.median_net_m >= 0 ? "var(--grow)" : "var(--erode)",
+      stroke: "var(--surface-1)", "stroke-width": 2 }));
+    const v = el("text", { class: "val", x: x(d.median_sce_m) + 10, y: y + h - 3 });
+    v.textContent = `${d.median_sce_m.toFixed(0)} m swept · ${F.m(d.median_net_m)} net`;
+    g.appendChild(v);
+    const hit = el("rect", { x: 0, y: y - 6, width: W, height: rowH, fill: "transparent" });
+    hit.addEventListener("mousemove", e => showTip(
+      `<div class="t">${d.label}</div>
+       <div class="r">Range swept ${d.median_sce_m.toFixed(1)} m</div>
+       <div class="r">Net ${F.m(d.median_net_m)}</div>
+       <div class="r">Movement is ${d.churn_ratio}× the net</div>`, e));
+    hit.addEventListener("mouseleave", hideTip);
+    hit.addEventListener("click", () => select(d.site, true));
+    g.appendChild(hit); svg.appendChild(g);
+  });
+}
+
+function drawTwin() {
+  const data = [...SITES].sort((a, b) => a.median_rate_m_yr - b.median_rate_m_yr);
+  const W = 430, rowH = 30, padL = 168, padR = 52, padT = 10, padB = 32;
+  const H = padT + data.length * rowH + padB;
+
+  function panel(id, accessor, opts) {
+    const svg = document.getElementById(id);
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.replaceChildren();
+    const vals = data.map(accessor).filter(v => v != null);
+    const lo = Math.min(0, ...vals), hi = Math.max(0, ...vals);
+    const span = (hi - lo) || 1;
+    const x = v => padL + ((v - lo) / span) * (W - padL - padR);
+
+    opts.ticks.forEach(t => {
+      svg.appendChild(el("line", { class: "grid-line", x1: x(t), x2: x(t), y1: padT - 4, y2: H - padB }));
+      const l = el("text", { class: "tick", x: x(t), y: H - padB + 15, "text-anchor": "middle" });
+      l.textContent = t; svg.appendChild(l);
+    });
+
+    data.forEach((d, i) => {
+      const v = accessor(d); if (v == null) return;
+      const y = padT + i * rowH, h = 13;
+      const g = el("g", { class: "row" }); g.dataset.site = d.site; g.style.cursor = "pointer";
+      const nm = el("text", { class: "lbl", x: padL - 10, y: y + h - 2, "text-anchor": "end" });
+      nm.textContent = opts.label(d);
+      nm.setAttribute("style", "font-size:11.5px"); g.appendChild(nm);
+      const x0 = x(Math.max(lo, 0)), x1 = x(v);
+      g.appendChild(el("rect", { class: "bar", x: Math.min(x0, x1), y,
+        width: Math.max(Math.abs(x1 - x0), 2), height: h, rx: 4, fill: opts.fill(v) }));
+      const t = el("text", { class: "val", x: Math.max(x0, x1) + 7, y: y + h - 2 });
+      t.setAttribute("style", "font-size:11px");
+      t.textContent = opts.fmt(v); g.appendChild(t);
+      const hit = el("rect", { x: 0, y: y - 5, width: W, height: rowH, fill: "transparent" });
+      hit.addEventListener("mousemove", e => showTip(
+        `<div class="t">${d.label}</div>
+         <div class="r">${d.territory ?? d.country}</div>
+         <div class="r">Sea level +${d.sea_level_mm_yr} mm/yr</div>
+         <div class="r">Ocean +${d.sst_warming_c}°C vs 1951–1980</div>
+         <div class="r">Shoreline ${F.rate(d.median_rate_m_yr)} m/yr</div>`, e));
+      hit.addEventListener("mouseleave", hideTip);
+      hit.addEventListener("click", () => select(d.site, true));
+      g.appendChild(hit); svg.appendChild(g);
+    });
+    if (lo < 0) svg.appendChild(el("line", { class: "zero-line",
+      x1: x(0), x2: x(0), y1: padT - 4, y2: H - padB }));
+  }
+
+  panel("slChart", d => d.sea_level_mm_yr, {
+    ticks: [0, 2, 4], fill: () => "var(--neutral)",
+    fmt: v => `+${v.toFixed(1)}`,
+    label: d => d.territory ?? d.country,
+  });
+  panel("respChart", d => d.median_rate_m_yr, {
+    ticks: [-0.2, 0, 0.2, 0.4],
+    fill: v => v >= 0 ? "var(--grow)" : "var(--erode)",
+    fmt: v => F.rate(v), label: d => d.label,
+  });
+}
+
+function drawTable() {
+  const cols = [["label","Site"],["country","Country"],["median_rate_m_yr","Rate m/yr"],
+    ["pct_eroding","% eroding"],["median_sce_m","Swept m"],["median_net_m","Net m"],
+    ["n_good","Transects"],["n_sig","Significant"]];
+  const t = document.createElement("table");
+  t.innerHTML = "<thead><tr>" + cols.map(c => `<th>${c[1]}</th>`).join("") + "</tr></thead>";
+  const tb = document.createElement("tbody");
+  [...SITES].sort((a, b) => a.median_rate_m_yr - b.median_rate_m_yr).forEach(r => {
+    const tr = document.createElement("tr");
+    tr.dataset.site = r.site; tr.style.cursor = "pointer";
+    tr.innerHTML = cols.map(c => {
+      const v = r[c[0]];
+      if (typeof v !== "number") return `<td>${v}</td>`;
+      if (c[0] === "median_rate_m_yr") return `<td>${F.rate(v)}</td>`;
+      if (c[0] === "median_net_m") return `<td>${F.m(v)}</td>`;
+      return `<td>${v.toLocaleString()}</td>`;
+    }).join("");
+    tr.addEventListener("click", () => select(r.site, true));
+    tb.appendChild(tr);
+  });
+  t.appendChild(tb);
+  document.getElementById("table").replaceChildren(t);
+}
+
+/* ---------- theme ---------- */
+const btn = document.getElementById("themeBtn");
+function syncBtn() {
+  const set = document.documentElement.getAttribute("data-theme");
+  const dark = set ? set === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  btn.textContent = dark ? "Light" : "Dark";
+}
+btn.addEventListener("click", () => {
+  const set = document.documentElement.getAttribute("data-theme");
+  const dark = set ? set === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+  syncBtn(); if (current) renderStage();
+});
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncBtn);
+
+/* ---------- boot ---------- */
+(async function () {
+  syncBtn();
+  SITES = await getJSON("data/sites.json");
+  if (!SITES) {
+    document.querySelector(".wrap").insertAdjacentHTML("afterbegin",
+      '<div class="pull">No data. Run <code>python pipeline.py</code> then ' +
+      '<code>python webprep.py</code>, and serve over http — <code>file://</code> blocks fetch.</div>');
+    return;
+  }
+  drawTiles(); drawPicker(); drawRates(); drawTwin(); drawChurn(); drawTable();
+  select("funafuti");
+})();
+</script>
+</body>
+</html>
