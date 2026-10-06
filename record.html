@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Recording — The island stays</title>
+<!-- Recording helper only: shows the site with a round webcam bubble on top.
+     Lives outside site/ so it is not deployed. Open via http://localhost:8765/record.html (poster: ?src=site/poster.html) -->
+<style>
+  html, body { margin:0; height:100%; overflow:hidden; background:#f5f4f1; }
+  body { display:flex; flex-direction:column; }
+  iframe { border:0; width:100%; display:block; }
+  #page { flex:1; }
+  /* Script strip under the laptop camera. Record only the area below it. */
+  #prompt { height:28vh; flex:none; border-bottom:3px solid #e34948; display:none; }
+  #cam {
+    position:fixed; left:28px; bottom:28px; width:220px; height:220px;
+    border-radius:50%; overflow:hidden; cursor:grab; z-index:10;
+    border:4px solid #fff; box-shadow:0 6px 24px rgba(0,0,0,.28);
+    background:#222; touch-action:none;
+  }
+  #cam.drag { cursor:grabbing; }
+  #cam video { width:100%; height:100%; object-fit:cover; transform:scaleX(-1); pointer-events:none; }
+  #help {
+    position:fixed; bottom:12px; left:50%; transform:translateX(-50%); z-index:11;
+    background:rgba(0,0,0,.78); color:#fff; font:13px/1.4 system-ui,sans-serif;
+    padding:8px 14px; border-radius:8px; transition:opacity .3s;
+  }
+</style>
+</head>
+<body>
+<iframe id="prompt" title="Script"></iframe>
+<iframe id="page" src="site/" title="Site"></iframe>
+<div id="cam"><video id="v" autoplay muted playsinline></video></div>
+<div id="help"><b>N</b> / <b>B</b> next / back in script · drag the circle to move · <b>+</b> / <b>−</b> circle size · <b>]</b> / <b>[</b> zoom poster · <b>F</b> fit width · <b>H</b> hides this tip</div>
+<script>
+// ?src=site/poster.html shows the poster instead of the interactive site.
+const src = new URLSearchParams(location.search).get("src");
+if (src) document.getElementById("page").src = src;
+// ?prompt=1 adds the script strip at the top (not recorded: select only the area below it).
+const prompt = document.getElementById("prompt");
+if (new URLSearchParams(location.search).get("prompt")) {
+  prompt.style.display = "block";
+  prompt.src = "prompter.html";
+}
+// Jump the script to the next / previous step.
+function stepScript(dir) {
+  const d = prompt.contentDocument;
+  if (!d) return;
+  const y = d.scrollingElement.scrollTop;
+  const tops = [...d.querySelectorAll(".step")].map(e => e.offsetTop - 12);
+  const t = dir > 0 ? tops.find(v => v > y + 5) : tops.reverse().find(v => v < y - 5);
+  if (t !== undefined) d.scrollingElement.scrollTo({ top: t, behavior: "smooth" });
+}
+prompt.addEventListener("load", () => prompt.contentDocument.addEventListener("keydown", onKey));
+const cam = document.getElementById("cam");
+const help = document.getElementById("help");
+navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 }, audio: false })
+  .then(s => { document.getElementById("v").srcObject = s; })
+  .catch(e => { help.textContent = "Camera blocked: allow camera access for this page, then reload. (" + e.name + ")"; });
+
+let size = 220;
+const setSize = n => {
+  size = Math.max(120, Math.min(520, n));
+  cam.style.width = cam.style.height = size + "px";
+};
+
+// Drag the bubble with the mouse.
+let dx = 0, dy = 0, dragging = false;
+cam.addEventListener("pointerdown", e => {
+  dragging = true; cam.classList.add("drag"); cam.setPointerCapture(e.pointerId);
+  const r = cam.getBoundingClientRect(); dx = e.clientX - r.left; dy = e.clientY - r.top;
+});
+cam.addEventListener("pointermove", e => {
+  if (!dragging) return;
+  cam.style.left = (e.clientX - dx) + "px"; cam.style.top = (e.clientY - dy) + "px";
+  cam.style.bottom = "auto";
+});
+cam.addEventListener("pointerup", () => { dragging = false; cam.classList.remove("drag"); });
+
+// The poster is a fixed A1 page with overflow hidden (for print), so it can't scroll
+// on its own. Re-enable scrolling inside the frame and fit the poster to the width.
+const page = document.getElementById("page");
+let zoom = 1, fitZoom = 1;
+const setZoom = z => {
+  const d = page.contentDocument;
+  if (!d) return;
+  zoom = Math.max(0.3, Math.min(2, z));
+  d.documentElement.style.zoom = zoom;
+};
+page.addEventListener("load", () => {
+  const d = page.contentDocument;
+  if (!d) return;
+  const st = d.createElement("style");
+  st.textContent = "html { overflow:auto !important; }";
+  d.head.appendChild(st);
+  d.documentElement.style.zoom = 1;
+  const w = d.body.scrollWidth;
+  fitZoom = w > page.clientWidth ? page.clientWidth / w : 1;
+  setZoom(fitZoom);
+  d.addEventListener("keydown", onKey);
+});
+
+// Keys work whether the focus is on this page or inside the frame.
+function onKey(e) {
+  if (e.key === "+" || e.key === "=") setSize(size + 40);
+  if (e.key === "-" || e.key === "_") setSize(size - 40);
+  if (e.key === "]") setZoom(zoom + 0.1);
+  if (e.key === "[") setZoom(zoom - 0.1);
+  if (e.key === "f" || e.key === "F") setZoom(fitZoom);
+  if (e.key === "n" || e.key === "N") stepScript(1);
+  if (e.key === "b" || e.key === "B") stepScript(-1);
+  if (e.key === "h" || e.key === "H") help.style.opacity = help.style.opacity === "0" ? "1" : "0";
+}
+addEventListener("keydown", onKey);
+setTimeout(() => { help.style.opacity = "0"; }, 8000);
+</script>
+</body>
+</html>
